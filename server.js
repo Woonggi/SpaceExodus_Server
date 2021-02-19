@@ -1,10 +1,16 @@
-const app = require('express')();
-const port = 8000
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const WebSocketServer = require('websocket').server;
 
-app.get('/', (req, res) => {
-    res.send("Hello World")  
+const port = 8080;
+
+server.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
 });
 
-app.listen(port, () => {
-    console.log(`listen ${port}`)
+let ws = new WebSocketServer ({
+    httpServer: server,
+    autoAcceptConnections: false
 });
