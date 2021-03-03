@@ -1,0 +1,13 @@
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\bin\Debug\netcoreapp3.1\Sever.exe
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\bin\Debug\netcoreapp3.1\Sever.deps.json
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\bin\Debug\netcoreapp3.1\Sever.runtimeconfig.json
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\bin\Debug\netcoreapp3.1\Sever.runtimeconfig.dev.json
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\bin\Debug\netcoreapp3.1\Sever.dll
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\bin\Debug\netcoreapp3.1\Sever.pdb
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\obj\Debug\netcoreapp3.1\Sever.csprojAssemblyReference.cache
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\obj\Debug\netcoreapp3.1\Sever.AssemblyInfoInputs.cache
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\obj\Debug\netcoreapp3.1\Sever.AssemblyInfo.cs
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\obj\Debug\netcoreapp3.1\Sever.csproj.CoreCompileInputs.cache
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\obj\Debug\netcoreapp3.1\Sever.dll
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\obj\Debug\netcoreapp3.1\Sever.pdb
+C:\Users\dmsdn\Desktop\git\side\side_server\Sever\Sever\obj\Debug\netcoreapp3.1\Sever.genruntimeconfig.cache
