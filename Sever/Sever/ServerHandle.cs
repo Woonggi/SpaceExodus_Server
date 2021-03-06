@@ -16,6 +16,12 @@ namespace Sever
                 // Something went wrong. IDs are not matched!
                 Console.WriteLine($"Player \"{username}\", {client} are not matched with client ID {clientId}");
             }
+            //Server.clients[client].SendIntoGame(username);
+        }
+        public static void UDPTestReceived (int client, CustomPacket packet)
+        {
+            string msg = packet.ReadString();
+            Console.WriteLine($"Received packet via UDP : {msg}");
         }
     }
 }

@@ -8,6 +8,8 @@ namespace Sever
     public enum ServerPackets
     {
         SP_WELCOME = 0,
+        UDP_TEST,
+        SP_SPAWNPLAYER,
         SP_PLAYER_POS,
         SP_PLAYER_ROT,
         SP_BULLET_POS
@@ -15,7 +17,9 @@ namespace Sever
 
     public enum ClientPackets
     {
-        CP_WELCOME_RECEIVED = 0
+        CP_WELCOME_RECEIVED = 0,
+        UDP_RECEIVED,
+        CP_PLAYERMOVEMENT
     };
 
     public class CustomPacket : IDisposable
@@ -97,9 +101,12 @@ namespace Sever
     {
         buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
     }
+    public void InsertInt(int value)
+    {
+        buffer.InsertRange(0, BitConverter.GetBytes(value));
+    }
 
-
-    public byte ReadByte(bool moveReadPos = true)
+        public byte ReadByte(bool moveReadPos = true)
     {
         if (buffer.Count > readPos)
         {

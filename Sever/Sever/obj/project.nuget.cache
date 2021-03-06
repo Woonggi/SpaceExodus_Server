@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "81imkjmLu7/jMuF1X71hPZ/GjXuCaOA/w65X+/E+AdoSDAi/wnqxateQUb6g8atbdCaJ55rdp+ULu2fQilCGqw==",
+  "dgSpecHash": "CI1dCZG+pp6GVGfXr4Moa0RN8agd6S31j7Kh+QEKthla9451WLmkKVcscpOhu+FqcehPjSD+c3Pr977wK3goXg==",
   "success": true,
   "projectFilePath": "C:\\Users\\dmsdn\\Desktop\\git\\side\\side_server\\Sever\\Sever\\Sever.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512"
+  ],
   "logs": []
 }

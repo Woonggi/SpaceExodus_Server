@@ -3,30 +3,34 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Numerics;
 
 namespace Sever
 {
-    public class Client
+    class Client
     {
         public static int dataBufferSize = 4096; // 4mb
         public int id;
+        public Player player;
         public TCP tcp;
+        public UDP udp;
 
         // Client class
         public Client(int _id)
         {
             id = _id;
             tcp = new TCP(id);
+            udp = new UDP(id);
         }
         // To manage socket
-        public class TCP 
+        public class TCP
         {
             public TcpClient socket;
             private readonly int id;
             private NetworkStream stream;
             private CustomPacket receivedData;
             private byte[] receivedBuffer;
-        
+
             public TCP(int _id)
             {
                 id = _id;
@@ -55,7 +59,7 @@ namespace Sever
                         stream.BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine($"Error sending data to player {id} : {e}");
                 }
@@ -66,7 +70,7 @@ namespace Sever
                 try
                 {
                     int byteLength = stream.EndRead(_result);
-                    if(byteLength <= 0)
+                    if (byteLength <= 0)
                     {
                         // disconnect
                         return;
@@ -77,7 +81,7 @@ namespace Sever
                     receivedData.Reset(HandleData(data));
                     stream.BeginRead(receivedBuffer, 0, dataBufferSize, ReceiveCallback, null);
                 }
-                catch(Exception _ex)
+                catch (Exception _ex)
                 {
                     Console.WriteLine($"Error receiving TCP data: {_ex}");
                     // disconnect properly.
@@ -131,5 +135,63 @@ namespace Sever
             }
         }
 
+        public class UDP
+        {
+            public IPEndPoint endPoint;
+            private int id;
+            public UDP(int _id)
+            {
+                id = _id;
+            }
+            public void Connect(IPEndPoint _endPoint)
+            {
+                endPoint = _endPoint;
+                ServerSend.UDPTest(id);
+            }
+
+            public void SendData(CustomPacket packet)
+            {
+                Server.SendUDPData(endPoint, packet);
+            }
+
+            public void HandleData(CustomPacket packet)
+            {
+                int packetLength = packet.ReadInt();
+                byte[] packetBytes = packet.ReadBytes(packetLength);
+
+                ThreadManager.ExecuteOnMainThread(() =>
+                {
+                    using (CustomPacket packet = new CustomPacket(packetBytes))
+                    {
+                        int packetId = packet.ReadInt();
+                        Server.packetHandlers[packetId](id, packet);
+                    }
+                });
+            }
+
+            /*public void SendIntoGame(string username)
+            {
+                player = new Player(id, username, new Vector3(0, 0, 0));
+                foreach (Client client in Server.clients.Values)
+                {
+                    if (client.player != null)
+                    {
+                        // Skip sending to itself.
+                        if (client.id != id)
+                        {
+                            ServerSend.SpawnPlayer(id, client.player);
+                        }
+                    }
+                }
+                foreach (Client client in Server.clients.Values)
+                {
+                    if (client.player != null)
+                    {
+                        ServerSend.SpawnPlayer(client.id, player);
+                    }
+                }
+            }*/ 
+
+        }
     }
 }
