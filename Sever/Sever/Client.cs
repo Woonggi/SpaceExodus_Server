@@ -146,7 +146,6 @@ namespace Sever
             public void Connect(IPEndPoint _endPoint)
             {
                 endPoint = _endPoint;
-                ServerSend.UDPTest(id);
             }
 
             public void SendData(CustomPacket packet)
@@ -168,30 +167,29 @@ namespace Sever
                     }
                 });
             }
+        }
 
-            /*public void SendIntoGame(string username)
+        public void SendIntoGame(string username)
+        {
+            player = new Player(id, username, new Vector3(0, 0, 0));
+            foreach (Client client in Server.clients.Values)
             {
-                player = new Player(id, username, new Vector3(0, 0, 0));
-                foreach (Client client in Server.clients.Values)
+                if (client.player != null)
                 {
-                    if (client.player != null)
+                    // Skip sending to itself.
+                    if (client.id != id)
                     {
-                        // Skip sending to itself.
-                        if (client.id != id)
-                        {
-                            ServerSend.SpawnPlayer(id, client.player);
-                        }
+                        ServerSend.SpawnPlayer(id, client.player);
                     }
                 }
-                foreach (Client client in Server.clients.Values)
+            }
+            foreach (Client client in Server.clients.Values)
+            {
+                if (client.player != null)
                 {
-                    if (client.player != null)
-                    {
-                        ServerSend.SpawnPlayer(client.id, player);
-                    }
+                    ServerSend.SpawnPlayer(client.id, player);
                 }
-            }*/ 
-
+            }
         }
     }
 }

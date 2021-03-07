@@ -70,16 +70,7 @@ namespace Sever
                 SendTCPData(client, packet);
             }
         }
-
-        public static void UDPTest(int client)
-        {
-            using (CustomPacket packet = new CustomPacket((int)ServerPackets.UDP_TEST))
-            {
-                packet.Write("A test packet for UDP.");
-                SendUDPData(client, packet);
-            }
-        }
-        
+ 
         public static void SpawnPlayer(int toClient, Player player)
         {
             using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_SPAWNPLAYER))
@@ -90,6 +81,25 @@ namespace Sever
                 packet.Write(player.rotation);
 
                 SendTCPData(toClient, packet);
+            }
+        }
+
+        public static void PlayerPosition(Player player)
+        {
+            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_POS))
+            {
+                packet.Write(player.id);
+                packet.Write(player.position);
+                SendUDPDataToAll(packet);
+            }
+        }
+        public static void PlayerRotation(Player player)
+        {
+            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_ROT))
+            {
+                packet.Write(player.id);
+                packet.Write(player.rotation);
+                SendUDPDataToAll(packet, player.id);
             }
         }
     }

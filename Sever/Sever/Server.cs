@@ -109,7 +109,7 @@ namespace Sever
             packetHandlers = new Dictionary<int, PacketHandler>() 
             {
                 { (int)ClientPackets.CP_WELCOME_RECEIVED, ServerHandle.WelcomeReceived },
-                { (int)ClientPackets.UDP_RECEIVED, ServerHandle.UDPTestReceived}
+                { (int)ClientPackets.CP_PLAYERMOVEMENT, ServerHandle.PlayerMovement}
             };
             Console.WriteLine("Initialized Packets!");
         }
