@@ -73,6 +73,7 @@ namespace Sever
                     if (byteLength <= 0)
                     {
                         // disconnect
+                        Server.clients[id].Disconnect();
                         return;
                     }
                     byte[] data = new byte[byteLength];
@@ -84,7 +85,7 @@ namespace Sever
                 catch (Exception _ex)
                 {
                     Console.WriteLine($"Error receiving TCP data: {_ex}");
-                    // disconnect properly.
+                    Server.clients[id].Disconnect();
                 }
             }
             private bool HandleData(byte[] data)
@@ -133,6 +134,15 @@ namespace Sever
                 // Still left partial packets to read.
                 return false;
             }
+
+            public void Disconnect()
+            {
+                socket.Close();
+                stream = null;
+                receivedData = null;
+                receivedBuffer = null;
+                socket = null;
+            }
         }
 
         public class UDP
@@ -167,6 +177,11 @@ namespace Sever
                     }
                 });
             }
+
+            public void Disconnect()
+            {
+                endPoint = null;
+            }
         }
 
         public void SendIntoGame(string username)
@@ -190,6 +205,13 @@ namespace Sever
                     ServerSend.SpawnPlayer(client.id, player);
                 }
             }
+        }
+        private void Disconnect()
+        {
+            Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+            player = null;
+            tcp.Disconnect();
+            udp.Disconnect();
         }
     }
 }

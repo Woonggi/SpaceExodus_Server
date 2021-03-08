@@ -12,15 +12,17 @@ namespace Sever
         public Vector3 position;
         public Vector3 velocity;
         public float rotation;
+        public float heading;
 
-        private float moveSpeed = 5f / Constants.TICKS_PER_SEC;
+        private float moveSpeed = 0.1f / Constants.TICKS_PER_SEC;
         private bool[] inputs;
         public Player(int _id, string _username, Vector3 spawnPosition)
         {
             id = _id;
             username = _username;
             position = spawnPosition;
-            rotation = 90.0f;
+            rotation = 0.0f;
+            heading = 0.0f;
             velocity = Vector3.Zero;
             inputs = new bool[4];
         }
@@ -29,16 +31,16 @@ namespace Sever
         {
             if (inputs[0] == true)
             {
-                velocity.X += MathF.Cos(Constants.Deg2Rad * rotation);
-                velocity.Y += MathF.Sin(Constants.Deg2Rad * rotation);
+                velocity.X += MathF.Cos(Constants.Deg2Rad * rotation + 90.0f);
+                velocity.Y += MathF.Sin(Constants.Deg2Rad * rotation + 90.0f);
             }
             if (inputs[2] == true)
             {
-                rotation += 1;     
+                rotation += 5f;     
             }
             if (inputs[3] == true)
             {
-                rotation -= 1;
+                rotation -= 5f;
             }
 
             Move();
@@ -46,7 +48,7 @@ namespace Sever
 
         private void Move ()
         {
-            position += velocity;
+            position += velocity * moveSpeed; 
             ServerSend.PlayerPosition(this);
             ServerSend.PlayerRotation(this);
         }
