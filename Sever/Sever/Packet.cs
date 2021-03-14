@@ -7,16 +7,15 @@ namespace Sever
 {
     public enum ServerPackets
     {
-        SP_WELCOME = 0,
+        SP_WELCOME = 1,
         SP_SPAWNPLAYER,
         SP_PLAYER_POS,
-        SP_PLAYER_ROT,
-        SP_BULLET_POS
+        SP_PLAYER_ROT
     };
 
     public enum ClientPackets
     {
-        CP_WELCOME_RECEIVED = 0,
+        CP_WELCOME_RECEIVED = 1,
         CP_PLAYERMOVEMENT
     };
 
