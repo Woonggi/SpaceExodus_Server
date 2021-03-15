@@ -12,8 +12,11 @@ namespace SpaceExodus_Server
 
         public Vector3 position;
         public Quaternion rotation;
+        public float angle;
 
+        // private Vector3 direction; 
         private float moveSpeed = 5f / Constants.TICS_PER_SEC;
+        private float rotSpeed = 50f / Constants.TICS_PER_SEC;
         private bool[] inputs;
 
         public Player (int _id, string _username, Vector3 _spawnPosition)
@@ -23,51 +26,55 @@ namespace SpaceExodus_Server
             position = _spawnPosition;
             rotation = Quaternion.Identity;
 
+            angle = 0.0f;
+
             inputs = new bool[4];
         }
         public void Update()
         {
-            Vector2 inputDirection = Vector2.Zero;
+            Vector3 inputDirection = Vector3.Zero;
+            float heading = angle + 90f;
+            float inputAngle = 0.0f;
             // W
             if (inputs[0] == true)
             {
-                inputDirection.Y += 1f;
+                inputDirection += new Vector3(MathF.Cos(heading * Constants.DEG_2_RAD), MathF.Sin(heading * Constants.DEG_2_RAD), 0.0f);
             }
             // S
             if (inputs[1] == true)
             {
-                inputDirection.Y -= 1f;
             }
             // A
             if (inputs[2] == true)
             {
-                inputDirection.X += 1f;
+                angle += 5.0f;
             }
             // D
             if (inputs[3] == true)
             {
-                inputDirection.X -= 1f;
+                angle -= 5.0f;
             }
 
-            Move(inputDirection);
+            Move(inputDirection, inputAngle);
         }
 
-        private void Move(Vector2 inputDirection)
+        private void Move(Vector3 inputDirection, float inputAngle)
         {
-            Vector3 forward = Vector3.Transform(new Vector3(0, 0, 1), rotation);
-            Vector3 right = Vector3.Normalize(Vector3.Cross(forward, new Vector3(0, 1, 0)));
+            //Vector3 forward = Vector3.Transform(new Vector3(0, 0, 1), rotation);
+            //Vector3 right = Vector3.Normalize(Vector3.Cross(forward, new Vector3(0, 1, 0)));
 
-            Vector3 moveDirection = right * inputDirection.X + forward * inputDirection.Y;
-            position += moveDirection * moveSpeed;
+            //Vector3 moveDirection = right * inputDirection.X + forward * inputDirection.Y;
+            position += inputDirection * moveSpeed;
+            angle += inputAngle * rotSpeed;
 
             ServerSend.PlayerPosition(this);
             ServerSend.PlayerRotation(this);
         }
  
-        public void SetInputs(bool[] _inputs, Quaternion _rotation)
+        public void SetInputs(bool[] _inputs, float _rotation)
         {
             inputs = _inputs;
-            rotation = _rotation;
+            angle = _rotation;
         }
     }
 }

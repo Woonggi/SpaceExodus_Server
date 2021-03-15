@@ -27,9 +27,14 @@ namespace SpaceExodus_Server
             {
                 inputs[i] = packet.ReadBool();
             }
-            Quaternion rotation = packet.ReadQuaternion();
+            // TEST!
+            //Quaternion rotation = packet.ReadQuaternion();
+            float angle = packet.ReadFloat();
 
-            Server.clients[fromClient].player.SetInputs(inputs, rotation);
+            if (Server.clients[fromClient].player != null) 
+            { 
+                Server.clients[fromClient].player.SetInputs(inputs, angle);
+            }
         }
     }
 }

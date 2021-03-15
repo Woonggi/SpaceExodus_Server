@@ -97,9 +97,10 @@ namespace SpaceExodus_Server
         {
             using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_ROTATION))
             {
+                // TEST!
                 packet.Write(player.id);
-                packet.Write(player.rotation);
-                SendUDPDataToAll(packet, player.id);
+                packet.Write(player.angle);
+                SendUDPDataToAll(packet);
             }
         }
     }
