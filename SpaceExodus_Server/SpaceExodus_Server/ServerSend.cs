@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Sever
+namespace SpaceExodus_Server
 {
     class ServerSend
     {
-        private static void SendTCPData(int client, CustomPacket packet)
+        private static void SendTCPData(int toClient, CustomPacket packet)
         {
             packet.WriteLength();
-            Server.clients[client].tcp.SendData(packet);
+            Server.clients[toClient].tcp.SendData(packet);
         }
 
-        private static void SendUDPData(int client, CustomPacket packet)
+        private static void SendUDPData(int toClient, CustomPacket packet)
         {
             packet.WriteLength();
-            Server.clients[client].udp.SendData(packet);
+            Server.clients[toClient].udp.SendData(packet);
         }
 
-        private static void SendTCPDataToAll(CustomPacket packet)
+        private static void SendTCPDataToAll (CustomPacket packet)
         {
             packet.WriteLength();
             for (int i = 1; i <= Server.maxPlayers; i++)
@@ -27,8 +27,9 @@ namespace Sever
             }
         }
 
-        private static void SendTCPDataToAll(CustomPacket packet, int except)
+        private static void SendTCPDataToAll (CustomPacket packet, int except)
         {
+            packet.WriteLength();
             for (int i = 1; i <= Server.maxPlayers; i++)
             {
                 if (i != except)
@@ -49,6 +50,7 @@ namespace Sever
 
         private static void SendUDPDataToAll(CustomPacket packet, int except)
         {
+            packet.WriteLength();
             for (int i = 1; i <= Server.maxPlayers; i++)
             {
                 if (i != except)
@@ -58,20 +60,19 @@ namespace Sever
             }
         }
 
-        public static void Welcome(int client, string msg)
+        public static void Welcome (int toClient, string msg)
         {
-            // using is the right way to use IDisposable object.
             using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_WELCOME))
             {
                 packet.Write(msg);
-                packet.Write(client);
-                SendTCPData(client, packet);
+                packet.Write(toClient);
+                SendTCPData(toClient, packet);
             }
         }
- 
+
         public static void SpawnPlayer(int toClient, Player player)
         {
-            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_SPAWNPLAYER))
+            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_SPAWN_PLAYER))
             {
                 packet.Write(player.id);
                 packet.Write(player.username);
@@ -84,16 +85,17 @@ namespace Sever
 
         public static void PlayerPosition(Player player)
         {
-            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_POS))
+            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_POSITION))
             {
                 packet.Write(player.id);
                 packet.Write(player.position);
+                //Console.WriteLine(player.position);
                 SendUDPDataToAll(packet);
             }
         }
         public static void PlayerRotation(Player player)
         {
-            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_ROT))
+            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_ROTATION))
             {
                 packet.Write(player.id);
                 packet.Write(player.rotation);

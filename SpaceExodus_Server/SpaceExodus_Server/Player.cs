@@ -3,66 +3,68 @@ using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
 
-namespace Sever
+namespace SpaceExodus_Server
 {
     class Player
     {
         public int id;
         public string username;
-        public Vector3 position;
-        public Vector3 velocity;
-        public float rotation;
-        public float heading;
 
-        private float moveSpeed = 5f / Constants.TICKS_PER_SEC;
+        public Vector3 position;
+        public Quaternion rotation;
+
+        private float moveSpeed = 5f / Constants.TICS_PER_SEC;
         private bool[] inputs;
-        public Player(int _id, string _username, Vector3 spawnPosition)
+
+        public Player (int _id, string _username, Vector3 _spawnPosition)
         {
             id = _id;
             username = _username;
-            position = spawnPosition;
-            rotation = 0.0f;
+            position = _spawnPosition;
+            rotation = Quaternion.Identity;
+
             inputs = new bool[4];
         }
-
         public void Update()
         {
             Vector2 inputDirection = Vector2.Zero;
+            // W
             if (inputs[0] == true)
             {
-                //velocity.X += MathF.Cos(Constants.Deg2Rad * rotation + 90.0f);
-                //velocity.Y += MathF.Sin(Constants.Deg2Rad * rotation + 90.0f);
                 inputDirection.Y += 1f;
             }
+            // S
             if (inputs[1] == true)
             {
-                inputDirection.Y -= 1f; 
+                inputDirection.Y -= 1f;
             }
+            // A
             if (inputs[2] == true)
             {
                 inputDirection.X += 1f;
-                //rotation += 3f;
-                //rotation %= 360;
             }
+            // D
             if (inputs[3] == true)
             {
                 inputDirection.X -= 1f;
-                //rotation -= 3f;
-                //rotation %= 360;
             }
 
             Move(inputDirection);
         }
 
-        private void Move (Vector2 inputDirection)
+        private void Move(Vector2 inputDirection)
         {
-            position.X += inputDirection.X * moveSpeed;
-            position.Y += inputDirection.Y * moveSpeed;
+            Vector3 forward = Vector3.Transform(new Vector3(0, 0, 1), rotation);
+            Vector3 right = Vector3.Normalize(Vector3.Cross(forward, new Vector3(0, 1, 0)));
+
+            Vector3 moveDirection = right * inputDirection.X + forward * inputDirection.Y;
+            position += moveDirection * moveSpeed;
+
             ServerSend.PlayerPosition(this);
             ServerSend.PlayerRotation(this);
         }
-        
-        public void SetInputs (bool[] _inputs, float _rotation)
+ 
+        public void SetInputs(bool[] _inputs, Quaternion _rotation)
         {
             inputs = _inputs;
             rotation = _rotation;

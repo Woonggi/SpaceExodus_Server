@@ -4,72 +4,73 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Sever
+
+namespace SpaceExodus_Server
 {
     class Server
     {
         public static int maxPlayers { get; private set; }
         public static int port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
-        public delegate void PacketHandler(int client, CustomPacket packet);
+
+        public delegate void PacketHandler(int fromClient, CustomPacket packet);
         public static Dictionary<int, PacketHandler> packetHandlers;
 
         private static TcpListener tcpListener;
-        private static UdpClient udpListner; 
-
+        private static UdpClient udpListener;
+        
         public static void Start(int _maxPlayers, int _port)
         {
             maxPlayers = _maxPlayers;
             port = _port;
-            Console.WriteLine("Starting Server...");
+
             InitializeServerData();
+
+            Console.WriteLine("Starting Server...");
 
             tcpListener = new TcpListener(IPAddress.Any, port);
             tcpListener.Start();
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
 
-            udpListner = new UdpClient(port);
-            udpListner.BeginReceive(UDPReceiveCallback, null);
+            udpListener = new UdpClient(port);
+            udpListener.BeginReceive(UDPReceiveCallback, null);
 
-            Console.WriteLine($"Server started on {port}.");
-            // Possibly make ManualResetEvent to manage threads.
-            // ManualResetEvent - suspend execution of the main thread and signal when execution can continue.
+            Console.WriteLine($"Server started on {port}");
         }
 
         private static void TCPConnectCallback(IAsyncResult result)
         {
             TcpClient client = tcpListener.EndAcceptTcpClient(result);
-            // Since the main socket is now free, it can go back and wait for other clients.
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
             Console.WriteLine($"Incoming connection from {client.Client.RemoteEndPoint}...");
-            for (int i = 1; i <= maxPlayers; ++i)
+
+            for (int i = 1; i <= maxPlayers; i++)
             {
-                // if the slot is empty.
-                if(clients[i].tcp.socket == null)
+                if (clients[i].tcp.socket == null)
                 {
-                    // newly connected instance in to the dictionary.
                     clients[i].tcp.Connect(client);
                     return;
                 }
             }
-            Console.WriteLine($"{client.Client.RemoteEndPoint} failed to connect: the server is full!");
+            Console.WriteLine($"{client.Client.RemoteEndPoint} failed to connect: Server Full!");
         }
-        
+
         private static void UDPReceiveCallback(IAsyncResult result)
         {
             try
             {
                 IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                byte[] data = udpListner.EndReceive(result, ref clientEndPoint);
-                udpListner.BeginReceive(UDPReceiveCallback, null);
+                byte[] data = udpListener.EndReceive(result, ref clientEndPoint);
+                udpListener.BeginReceive(UDPReceiveCallback, null);
+
                 if (data.Length < 4)
                 {
                     return;
                 }
-                using (CustomPacket packet = new CustomPacket(data)) 
+
+                using (CustomPacket packet = new CustomPacket(data))
                 {
                     int clientId = packet.ReadInt();
-
                     if (clientId == 0)
                     {
                         return;
@@ -99,7 +100,7 @@ namespace Sever
             {
                 if (clientEndPoint != null)
                 {
-                    udpListner.BeginSend(packet.ToArray(), packet.Length(), clientEndPoint, null, null);
+                    udpListener.BeginSend(packet.ToArray(), packet.Length(), clientEndPoint, null, null);
                 }
             }
             catch (Exception ex)
@@ -107,18 +108,19 @@ namespace Sever
                 Console.WriteLine($"Error sending data to {clientEndPoint} via UDP: {ex}");
             }
         }
+
         private static void InitializeServerData()
         {
-            for(int i = 1;  i <= maxPlayers; i++)
+            for (int i = 1; i <= maxPlayers; i++)
             {
                 clients.Add(i, new Client(i));
             }
-            packetHandlers = new Dictionary<int, PacketHandler>() 
+
+            packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.CP_WELCOME_RECEIVED, ServerHandle.WelcomeReceived },
-                { (int)ClientPackets.CP_PLAYERMOVEMENT, ServerHandle.PlayerMovement}
+                { (int)ClientPackets.CP_PLAYER_MOVEMENT, ServerHandle.PlayerMovement},
             };
-            Console.WriteLine("Initialized Packets!");
         }
 
     }
