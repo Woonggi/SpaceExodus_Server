@@ -36,5 +36,10 @@ namespace SpaceExodus_Server
                 Server.clients[fromClient].player.SetInputs(inputs, angle);
             }
         }
+
+        public static void PlayerShooting(int fromClient, CustomPacket packet)
+        {
+            Server.clients[fromClient].player.Shooting();
+        }
     }
 }

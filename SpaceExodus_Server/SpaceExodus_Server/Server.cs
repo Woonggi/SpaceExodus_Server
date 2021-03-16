@@ -119,7 +119,8 @@ namespace SpaceExodus_Server
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.CP_WELCOME_RECEIVED, ServerHandle.WelcomeReceived },
-                { (int)ClientPackets.CP_PLAYER_MOVEMENT, ServerHandle.PlayerMovement},
+                { (int)ClientPackets.CP_PLAYER_MOVEMENT, ServerHandle.PlayerMovement },
+                { (int)ClientPackets.CP_PLAYER_SHOOTING, ServerHandle.PlayerShooting }
             };
         }
 

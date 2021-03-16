@@ -13,6 +13,7 @@ namespace SpaceExodus_Server
         public Vector3 position;
         public Quaternion rotation;
         public float angle;
+        public float heading; 
 
         // private Vector3 direction; 
         private float moveSpeed = 5f / Constants.TICS_PER_SEC;
@@ -28,12 +29,12 @@ namespace SpaceExodus_Server
 
             angle = 0.0f;
 
-            inputs = new bool[4];
+            inputs = new bool[5];
         }
         public void Update()
         {
             Vector3 inputDirection = Vector3.Zero;
-            float heading = angle + 90f;
+            heading = angle + 90.0f;
             float inputAngle = 0.0f;
             // W
             if (inputs[0] == true)
@@ -75,6 +76,11 @@ namespace SpaceExodus_Server
         {
             inputs = _inputs;
             angle = _rotation;
+        }
+
+        public void Shooting()
+        {
+            ServerSend.PlayerShooting(this);
         }
     }
 }

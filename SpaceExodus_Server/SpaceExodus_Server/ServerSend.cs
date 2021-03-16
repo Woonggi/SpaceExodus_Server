@@ -103,5 +103,14 @@ namespace SpaceExodus_Server
                 SendUDPDataToAll(packet);
             }
         }
+        public static void PlayerShooting(Player player)
+        {
+            using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_SHOOTING))
+            {
+                packet.Write(player.id);
+                packet.Write(player.heading);
+                SendTCPDataToAll(packet);
+            }
+        }
     }
 }
