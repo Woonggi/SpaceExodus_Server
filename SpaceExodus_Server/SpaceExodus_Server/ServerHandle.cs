@@ -39,6 +39,7 @@ namespace SpaceExodus_Server
 
         public static void PlayerShooting(int fromClient, CustomPacket packet)
         {
+            Console.WriteLine(DateTime.Now.ToString());
             Server.clients[fromClient].player.Shooting();
         }
     }

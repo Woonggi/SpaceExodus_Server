@@ -9,7 +9,7 @@ namespace SpaceExodus_Server
 {
     class Client
     {
-        public static int dataBufferSize = 4096;
+        public static int dataBufferSize = 4096 * 1024;
 
         public int id;
         public Player player;
