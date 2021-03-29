@@ -15,6 +15,8 @@ namespace SpaceExodus_Server
                     client.player.Update();
                 }
             }
+            //Console.WriteLine(Server.frame++);
+            Server.frame++;
             ThreadManager.UpdateMain();
         }
     }

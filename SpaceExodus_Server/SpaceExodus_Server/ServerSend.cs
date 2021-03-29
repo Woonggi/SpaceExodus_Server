@@ -13,7 +13,7 @@ namespace SpaceExodus_Server
         }
 
         private static void SendUDPData(int toClient, CustomPacket packet)
-        {
+        { 
             packet.WriteLength();
             Server.clients[toClient].udp.SendData(packet);
         }
@@ -89,7 +89,7 @@ namespace SpaceExodus_Server
             {
                 packet.Write(player.id);
                 packet.Write(player.position);
-                //Console.WriteLine(player.position);
+                packet.Write(Server.frame);
                 SendUDPDataToAll(packet);
             }
         }
@@ -100,6 +100,7 @@ namespace SpaceExodus_Server
                 // TEST!
                 packet.Write(player.id);
                 packet.Write(player.angle);
+                packet.Write(Server.frame);
                 SendUDPDataToAll(packet);
             }
         }

@@ -12,6 +12,7 @@ namespace SpaceExodus_Server
         public static int maxPlayers { get; private set; }
         public static int port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
+        public static int frame = 1;
 
         public delegate void PacketHandler(int fromClient, CustomPacket packet);
         public static Dictionary<int, PacketHandler> packetHandlers;

@@ -16,7 +16,6 @@ namespace SpaceExodus_Server
             {
                 Console.WriteLine($"Player \"{username}\" (ID : {fromClient}) has assumed the wrong client ID ({clientIdCheck})!");
             }
-            // TODO : send player in the game.
             Server.clients[fromClient].SendIntoGame(username);
         }
 
@@ -30,16 +29,11 @@ namespace SpaceExodus_Server
             // TEST!
             //Quaternion rotation = packet.ReadQuaternion();
             float angle = packet.ReadFloat();
-
-            if (Server.clients[fromClient].player != null) 
-            { 
-                Server.clients[fromClient].player.SetInputs(inputs, angle);
-            }
+            Server.clients[fromClient].player.SetInputs(inputs, angle);
         }
 
         public static void PlayerShooting(int fromClient, CustomPacket packet)
         {
-            Console.WriteLine(DateTime.Now.ToString());
             Server.clients[fromClient].player.Shooting();
         }
     }

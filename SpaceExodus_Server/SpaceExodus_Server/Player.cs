@@ -48,12 +48,12 @@ namespace SpaceExodus_Server
             // A
             if (inputs[2] == true)
             {
-                angle += 5.0f;
+                inputAngle += 3.0f;
             }
             // D
             if (inputs[3] == true)
             {
-                angle -= 5.0f;
+                inputAngle -= 3.0f;
             }
 
             Move(inputDirection, inputAngle);
@@ -66,7 +66,7 @@ namespace SpaceExodus_Server
 
             //Vector3 moveDirection = right * inputDirection.X + forward * inputDirection.Y;
             position += inputDirection * moveSpeed;
-            angle += inputAngle * rotSpeed;
+            angle = inputAngle * rotSpeed; 
 
             ServerSend.PlayerPosition(this);
             ServerSend.PlayerRotation(this);
