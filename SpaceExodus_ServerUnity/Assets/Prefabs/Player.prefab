@@ -51,6 +51,7 @@ MonoBehaviour:
   heading: 0
   health: 0
   maxHealth: 5
+  weaponLevel: 1
   projectilePrefab: {fileID: 2115431013862823339, guid: 9ee4d3d94cd1558479df5e7c5e7bfd18,
     type: 3}
 --- !u!212 &-7004379082975991606

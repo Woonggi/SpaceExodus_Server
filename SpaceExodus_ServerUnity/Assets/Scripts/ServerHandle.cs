@@ -23,9 +23,6 @@ public class ServerHandle
         {
             inputs[i] = packet.ReadBool();
         }
-        // TEST!
-        //Quaternion rotation = packet.ReadQuaternion();
-        //Quaternion rotation = packet.ReadQuaternion();
         Server.clients[fromClient].player.SetInputs(inputs);
     }
 

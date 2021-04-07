@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     private bool[] inputs;
 
     public GameObject projectilePrefab;
+    public Vector3 spawnPosition;
 
     public void Initialize(int _id, string _username)
     {
@@ -27,6 +28,7 @@ public class Player : MonoBehaviour
         angle = 0.0f;
         inputs = new bool[5];
         health = maxHealth;
+        spawnPosition = Vector3.zero;
     }
     public void FixedUpdate()
     {
@@ -68,7 +70,6 @@ public class Player : MonoBehaviour
     public void SetInputs(bool[] _inputs)
     {
         inputs = _inputs;
-        //transform.rotation = _rotation;
     }
 
     public void Shooting(int weaponLevel, float projectileSpeed)
@@ -79,6 +80,29 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), Mathf.Sin(heading * Mathf.Deg2Rad));
         projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
         ServerSend.PlayerShooting(this);
+    }
+   
+    private void Active(bool active)
+    {
+        gameObject.GetComponent<Renderer>().enabled = active;
+        gameObject.GetComponent<Collider2D>().enabled = active;
+        gameObject.GetComponent<Player>().enabled = active;
+    }
+
+    public void Destroy(int killerId)
+    {
+        Active(false);
+        ServerSend.PlayerDestroy(this, killerId);
+        Debug.Log($"player {killerId} killed player {id}");
+        StartCoroutine("Respawn");
+
+    }
+    public IEnumerator Respawn()
+    {
+        Debug.Log("Respawning...");
+        yield return new WaitForSeconds(3f);
+        Active(true);
+        ServerSend.PlayerRespawn(this);
     }
 }
 

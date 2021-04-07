@@ -8,17 +8,17 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         GameObject otherObject = other.gameObject;
-        if (otherObject.tag == "Player" && otherObject.GetComponent<Player>().id != bulletId)
+        Player player = otherObject.GetComponent<Player>();
+        if (otherObject.tag == "Player" && player.id != bulletId)
         {
-            if (other.gameObject.GetComponent<Player>().health > 0)
+            if (player.health > 0)
             {
-                other.gameObject.GetComponent<Player>().health--;
+                player.health--;
                 ServerSend.PlayerHit(other.gameObject.GetComponent<Player>());
             }
             else
             {
-                Destroy(other.gameObject);
-                ServerSend.PlayerDestroy(other.gameObject.GetComponent<Player>());
+                player.Destroy(bulletId);
             }
             Destroy(gameObject);
         }

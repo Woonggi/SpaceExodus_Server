@@ -13,7 +13,8 @@ public enum ServerPackets
     SP_PLAYER_SHOOTING,
     SP_PLAYER_DISCONNECTED,
     SP_PLAYER_HIT,
-    SP_PLAYER_DESTROY
+    SP_PLAYER_DESTROY,
+    SP_PLAYER_RESPAWN
 }
 
 public enum ClientPackets

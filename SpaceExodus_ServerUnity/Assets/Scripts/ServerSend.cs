@@ -75,7 +75,6 @@ public class ServerSend
             packet.Write(player.id);
             packet.Write(player.username);
             packet.Write(player.transform.position);
-            // TODO : send angle when it spawns.
             packet.Write(player.transform.rotation);
             packet.Write(player.maxHealth);
 
@@ -134,12 +133,21 @@ public class ServerSend
         }
     }
 
-    public static void PlayerDestroy(Player player)
+    public static void PlayerDestroy(Player player, int killerId)
     {
         using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_DESTROY))
         {
             packet.Write(player.id);
-            packet.Write(player.health);
+            packet.Write(killerId);
+            SendTCPDataToAll(packet);
+        }
+    }
+    public static void PlayerRespawn(Player player)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_RESPAWN))
+        {
+            packet.Write(player.id);
+            packet.Write(player.spawnPosition);
             SendTCPDataToAll(packet);
         }
     }
