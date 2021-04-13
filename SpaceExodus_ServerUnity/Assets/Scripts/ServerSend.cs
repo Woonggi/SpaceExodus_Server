@@ -64,6 +64,7 @@ public class ServerSend
         {
             packet.Write(msg);
             packet.Write(toClient);
+            packet.Write(GameSettings.GOAL_KILL_SCORE);
             SendTCPData(toClient, packet);
         }
     }
@@ -76,7 +77,7 @@ public class ServerSend
             packet.Write(player.username);
             packet.Write(player.transform.position);
             packet.Write(player.transform.rotation);
-            packet.Write(player.maxHealth);
+            packet.Write(GameSettings.PLAYER_MAX_HEALTH);
 
             SendTCPData(toClient, packet);
         }
@@ -147,8 +148,19 @@ public class ServerSend
         using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_RESPAWN))
         {
             packet.Write(player.id);
+            packet.Write(GameSettings.PLAYER_MAX_HEALTH);
             packet.Write(player.spawnPosition);
             SendTCPDataToAll(packet);
         }
     }
+    
+    public static void GameOver(int winner)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_GAME_OVER))
+        {
+            packet.Write(winner);
+            SendTCPDataToAll(packet);
+        }
+    }
+
 }

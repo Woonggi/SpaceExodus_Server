@@ -119,7 +119,8 @@ public class Server
             {
                 { (int)ClientPackets.CP_WELCOME_RECEIVED, ServerHandle.WelcomeReceived },
                 { (int)ClientPackets.CP_PLAYER_MOVEMENT, ServerHandle.PlayerMovement },
-                { (int)ClientPackets.CP_PLAYER_SHOOTING, ServerHandle.PlayerShooting }
+                { (int)ClientPackets.CP_PLAYER_SHOOTING, ServerHandle.PlayerShooting },
+                { (int)ClientPackets.CP_GAME_OVER, ServerHandle.GameOver }
             };
     }
    

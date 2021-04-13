@@ -14,14 +14,16 @@ public enum ServerPackets
     SP_PLAYER_DISCONNECTED,
     SP_PLAYER_HIT,
     SP_PLAYER_DESTROY,
-    SP_PLAYER_RESPAWN
+    SP_PLAYER_RESPAWN,
+    SP_GAME_OVER
 }
 
 public enum ClientPackets
 {
     CP_WELCOME_RECEIVED = 1,
     CP_PLAYER_MOVEMENT,
-    CP_PLAYER_SHOOTING
+    CP_PLAYER_SHOOTING,
+    CP_GAME_OVER
 }
 
 public class CustomPacket : IDisposable

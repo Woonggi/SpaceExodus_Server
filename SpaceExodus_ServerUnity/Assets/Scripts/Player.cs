@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
     public float angle;
     public float heading;
     public int health;
-    public int maxHealth = 5;
     public int weaponLevel = 1;
 
     // private Vector3 direction; 
@@ -27,7 +26,7 @@ public class Player : MonoBehaviour
         username = _username;
         angle = 0.0f;
         inputs = new bool[5];
-        health = maxHealth;
+        health = GameSettings.PLAYER_MAX_HEALTH;
         spawnPosition = Vector3.zero;
     }
     public void FixedUpdate()
@@ -100,7 +99,8 @@ public class Player : MonoBehaviour
     public IEnumerator Respawn()
     {
         Debug.Log("Respawning...");
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
+        health = GameSettings.PLAYER_MAX_HEALTH;
         Active(true);
         ServerSend.PlayerRespawn(this);
     }

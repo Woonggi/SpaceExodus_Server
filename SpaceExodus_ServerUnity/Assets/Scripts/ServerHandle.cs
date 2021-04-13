@@ -32,4 +32,10 @@ public class ServerHandle
         float projectileSpeed = packet.ReadFloat();
         Server.clients[fromClient].player.Shooting(weaponLevel, projectileSpeed);
     }
+
+    public static void GameOver(int fromClient, CustomPacket packet)
+    {
+        int winner = packet.ReadInt();
+        ServerSend.GameOver(winner);
+    }
 }
