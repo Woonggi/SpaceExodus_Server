@@ -75,7 +75,7 @@ public class ServerSend
         {
             packet.Write(player.id);
             packet.Write(player.username);
-            packet.Write(player.transform.position);
+            packet.Write(player.spawnPosition);
             packet.Write(player.transform.rotation);
             packet.Write(GameSettings.PLAYER_MAX_HEALTH);
 
@@ -143,13 +143,13 @@ public class ServerSend
             SendTCPDataToAll(packet);
         }
     }
-    public static void PlayerRespawn(Player player)
+    public static void PlayerRespawn(Player player, Vector3 respawnPosition)
     {
         using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_RESPAWN))
         {
             packet.Write(player.id);
             packet.Write(GameSettings.PLAYER_MAX_HEALTH);
-            packet.Write(player.spawnPosition);
+            packet.Write(respawnPosition);
             SendTCPDataToAll(packet);
         }
     }
@@ -159,6 +159,15 @@ public class ServerSend
         using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_GAME_OVER))
         {
             packet.Write(winner);
+            SendTCPDataToAll(packet);
+        }
+    }
+    public static void PowerUp(Player player)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_POWERUP))
+        {
+            packet.Write(player.id); 
+            packet.Write(player.weaponLevel);
             SendTCPDataToAll(packet);
         }
     }

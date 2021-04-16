@@ -15,6 +15,7 @@ public enum ServerPackets
     SP_PLAYER_HIT,
     SP_PLAYER_DESTROY,
     SP_PLAYER_RESPAWN,
+    SP_PLAYER_POWERUP,
     SP_GAME_OVER
 }
 

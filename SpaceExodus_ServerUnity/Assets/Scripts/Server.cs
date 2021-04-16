@@ -31,6 +31,8 @@ public class Server
         tcpListener.Start();
         tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
 
+        Debug.Log(Dns.GetHostName());
+
         udpListener = new UdpClient(port);
         udpListener.BeginReceive(UDPReceiveCallback, null);
 

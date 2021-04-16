@@ -11,13 +11,16 @@ public class Player : MonoBehaviour
     public float heading;
     public int health;
     public int weaponLevel = 1;
+    public bool dead = false;
 
     // private Vector3 direction; 
     private float moveSpeed = 5f / Constants.TICS_PER_SEC;
     private float rotSpeed = 50f / Constants.TICS_PER_SEC;
     private bool[] inputs;
+    private bool onScreen;
 
-    public GameObject projectilePrefab;
+    public GameObject[] projectilePrefab;
+    public GameObject powerUpPrefab;
     public Vector3 spawnPosition;
 
     public void Initialize(int _id, string _username)
@@ -27,7 +30,8 @@ public class Player : MonoBehaviour
         angle = 0.0f;
         inputs = new bool[5];
         health = GameSettings.PLAYER_MAX_HEALTH;
-        spawnPosition = Vector3.zero;
+        spawnPosition = new Vector3(5.0f, 5.0f, 0.0f);
+        transform.position = spawnPosition;
     }
     public void FixedUpdate()
     {
@@ -59,11 +63,22 @@ public class Player : MonoBehaviour
 
     private void Move(Vector3 inputDirection, Vector3 inputAngle)
     {
-        transform.position += inputDirection * moveSpeed;
-        transform.Rotate(inputAngle * rotSpeed);
+        if (dead == false)
+        {
+            Vector3 screenPoint = Camera.main.WorldToScreenPoint(transform.position);
+            onScreen = screenPoint.x > 0 && screenPoint.x < Screen.width && screenPoint.y > 0 && screenPoint.y < Screen.height;
 
-        ServerSend.PlayerPosition(this);
-        ServerSend.PlayerRotation(this);
+            if (onScreen == false)
+            {
+                Vector3 newScreenPoint = new Vector3(Screen.width - screenPoint.x, Screen.height - screenPoint.y, 10.0f);
+                Vector3 screenToWorld = Camera.main.ScreenToWorldPoint(newScreenPoint);
+                transform.position = screenToWorld; 
+            }
+            transform.position += inputDirection * moveSpeed;
+            transform.Rotate(inputAngle * rotSpeed);
+            ServerSend.PlayerPosition(this);
+            ServerSend.PlayerRotation(this);
+        }
     }
 
     public void SetInputs(bool[] _inputs)
@@ -73,12 +88,15 @@ public class Player : MonoBehaviour
 
     public void Shooting(int weaponLevel, float projectileSpeed)
     {
-        GameObject projectile = Instantiate(projectilePrefab, transform.position, transform.rotation);
-        projectile.GetComponent<Bullet>().bulletId = id;
-        float heading = transform.rotation.eulerAngles.z + 90.0f;
-        Vector3 direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), Mathf.Sin(heading * Mathf.Deg2Rad));
-        projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
-        ServerSend.PlayerShooting(this);
+        if (dead == false)
+        {
+            GameObject projectile = Instantiate(projectilePrefab[weaponLevel - 1], transform.position, transform.rotation);
+            projectile.GetComponent<Bullet>().bulletId = id;
+            float heading = transform.rotation.eulerAngles.z + 90.0f;
+            Vector3 direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), Mathf.Sin(heading * Mathf.Deg2Rad));
+            projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+            ServerSend.PlayerShooting(this);
+        }
     }
    
     private void Active(bool active)
@@ -91,18 +109,30 @@ public class Player : MonoBehaviour
     public void Destroy(int killerId)
     {
         Active(false);
+        dead = true;
+        SpawnPowerUps();
         ServerSend.PlayerDestroy(this, killerId);
         Debug.Log($"player {killerId} killed player {id}");
         StartCoroutine("Respawn");
 
     }
+ 
     public IEnumerator Respawn()
     {
         Debug.Log("Respawning...");
         yield return new WaitForSeconds(5f);
         health = GameSettings.PLAYER_MAX_HEALTH;
         Active(true);
-        ServerSend.PlayerRespawn(this);
+        dead = false;
+        Vector3 spawnPositionScreen = new Vector3(Random.Range(10, Screen.width), Random.Range(10, Screen.height), 10.0f);
+        Vector3 respawnPosition = Camera.main.ScreenToWorldPoint(spawnPositionScreen);
+        transform.position = respawnPosition;
+        ServerSend.PlayerRespawn(this, respawnPosition);
+    }
+
+    private void SpawnPowerUps()
+    {
+        Instantiate(powerUpPrefab, transform.position, Quaternion.identity);
     }
 }
 

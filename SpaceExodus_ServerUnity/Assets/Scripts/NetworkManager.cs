@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NetworkManager : MonoBehaviour
 {
     public static NetworkManager instance;
     public GameObject playerPrefab;
+    public Text HostName;
 
     private void Awake()
     {
@@ -24,6 +27,7 @@ public class NetworkManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 30;
+        HostName.text = "Host Name : " + Dns.GetHostName();
         Server.Start(50, 26950);
     }
 

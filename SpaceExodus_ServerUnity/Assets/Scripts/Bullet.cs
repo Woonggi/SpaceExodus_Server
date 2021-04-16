@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public int bulletId;
+    public int damage;
     private void OnTriggerEnter2D(Collider2D other)
     {
         GameObject otherObject = other.gameObject;
@@ -13,7 +14,7 @@ public class Bullet : MonoBehaviour
         {
             if (player.health > 0)
             {
-                player.health--;
+                player.health -= damage;
                 ServerSend.PlayerHit(other.gameObject.GetComponent<Player>());
             }
             else
