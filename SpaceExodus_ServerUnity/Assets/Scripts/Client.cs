@@ -180,7 +180,7 @@ public class Client
 
     public void SendIntoGame(string playerName)
     {
-        player = NetworkManager.instance.InstantiatePlayer();
+        player = NetworkManager.instance.InstantiatePlayer(id);
         player.Initialize(id, playerName);
         foreach (Client client in Server.clients.Values)
         {

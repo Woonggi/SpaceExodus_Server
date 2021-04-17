@@ -51,6 +51,7 @@ MonoBehaviour:
   heading: 0
   health: 0
   weaponLevel: 1
+  dead: 0
   projectilePrefab:
   - {fileID: 2115431013862823339, guid: 9ee4d3d94cd1558479df5e7c5e7bfd18, type: 3}
   - {fileID: 2115431013862823339, guid: 6f0262560745e5f46895020fa81b95d2, type: 3}
@@ -118,7 +119,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

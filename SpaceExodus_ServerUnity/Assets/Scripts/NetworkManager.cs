@@ -8,6 +8,7 @@ public class NetworkManager : MonoBehaviour
 {
     public static NetworkManager instance;
     public GameObject playerPrefab;
+    public GameObject[] asteroidPrefabs;
     public Text HostName;
 
     private void Awake()
@@ -36,9 +37,9 @@ public class NetworkManager : MonoBehaviour
         Server.Stop(); 
     }
 
-    public Player InstantiatePlayer()
+    public Player InstantiatePlayer(int id)
     {
-        return Instantiate(playerPrefab, Vector3.zero, Quaternion.identity).GetComponent<Player>(); 
+        Player p = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity).GetComponent<Player>();
+        return p;
     }
-    
 }

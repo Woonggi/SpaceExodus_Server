@@ -549,6 +549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1526833782}
   - component: {fileID: 1526833781}
+  - component: {fileID: 1526833783}
   - component: {fileID: 1526833780}
   m_Layer: 0
   m_Name: NetworkManager
@@ -583,6 +584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 5681724233303272080, guid: 4c4bfe66eae379e49a8be5e4cd8cd5c6,
     type: 3}
+  asteroidPrefabs: []
   HostName: {fileID: 400839141}
 --- !u!4 &1526833782
 Transform:
@@ -598,3 +600,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1526833783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526833779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a343146c32e60334699f269ec3013e45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 5
+  maxAsteroids: 0
+  asteroidPrefabs:
+  - {fileID: 2535060423366134709, guid: b32f86f4aececa94d97e3c4f85ac5b45, type: 3}
+  - {fileID: 2535060423366134709, guid: 7e178411aeff3a34ca690f33f1a54239, type: 3}
+  - {fileID: 2535060423366134709, guid: f7587109fc12431488d833dbe0ea4218, type: 3}
+  - {fileID: 2535060423366134709, guid: 542ad81745475eb4fb7ed43a3c508035, type: 3}

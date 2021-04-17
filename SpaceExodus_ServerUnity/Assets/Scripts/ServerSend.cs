@@ -172,4 +172,35 @@ public class ServerSend
         }
     }
 
+    public static void SpawnAsteroid(Asteroid asteroid)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_ASTEROID_SPAWN))
+        {
+            packet.Write(asteroid.id);
+            packet.Write(asteroid.type);
+            packet.Write(asteroid.transform.position);
+            packet.Write(asteroid.transform.rotation);
+            packet.Write(asteroid.transform.localScale);
+            SendTCPDataToAll(packet);
+        }
+    }
+
+    public static void AsteroidPosition(Asteroid asteroid)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_ASTEROID_MOVEMENT))
+        {
+            packet.Write(asteroid.id);
+            packet.Write(asteroid.type);
+            packet.Write(asteroid.transform.position);
+            SendUDPDataToAll(packet);
+        }
+    }
+    public static void DestroyAsteroid(Asteroid asteroid)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_ASTEROID_DESTROY))
+        {
+            packet.Write(asteroid.id);
+            SendTCPDataToAll(packet);
+        }
+    }
 }

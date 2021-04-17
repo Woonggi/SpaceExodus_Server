@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
             if (player.health > 0)
             {
                 player.health -= damage;
-                ServerSend.PlayerHit(other.gameObject.GetComponent<Player>());
+                ServerSend.PlayerHit(player);
             }
             else
             {

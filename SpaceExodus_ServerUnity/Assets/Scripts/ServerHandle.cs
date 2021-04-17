@@ -13,6 +13,7 @@ public class ServerHandle
         {
             Debug.Log($"Player \"{username}\" (ID : {fromClient}) has assumed the wrong client ID ({clientIdCheck})!");
         }
+        Server.started = true;
         Server.clients[fromClient].SendIntoGame(username);
     }
 
