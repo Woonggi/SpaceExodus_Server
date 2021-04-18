@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ServerHandle
 {
@@ -38,5 +39,6 @@ public class ServerHandle
     {
         int winner = packet.ReadInt();
         ServerSend.GameOver(winner);
+        NetworkManager.instance.GameOver();
     }
 }

@@ -26,7 +26,7 @@ public class AsteroidGenerator : MonoBehaviour
 
     public void SpawnAsteroid()
     {
-        Vector3 spawnPosition = new Vector3(5.0f, 5.0f, 0.0f);
+        Vector3 spawnPosition = new Vector3(Random.Range(0.0f, 10.0f), Random.Range(0.0f, 10.0f), 0.0f);
         int type = Random.Range(0, 4); 
         Asteroid asteroid = Instantiate(asteroidPrefabs[type], spawnPosition, Quaternion.identity).GetComponent<Asteroid>();
         asteroid.id = ids++; asteroid.type = type;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -41,5 +42,11 @@ public class NetworkManager : MonoBehaviour
     {
         Player p = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity).GetComponent<Player>();
         return p;
+    }
+
+    public void GameOver()
+    {
+        Server.Stop();
+        Application.Quit();
     }
 }

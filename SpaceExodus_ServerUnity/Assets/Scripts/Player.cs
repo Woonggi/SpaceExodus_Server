@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     private float rotSpeed = 50f / Constants.TICS_PER_SEC;
     private bool[] inputs;
     private bool onScreen;
+    private int bulletIndex;
 
     public GameObject[] projectilePrefab;
     public GameObject powerUpPrefab;
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour
 
     public void Initialize(int _id, string _username)
     {
+        bulletIndex = 0;
         id = _id;
         username = _username;
         angle = 0.0f;
@@ -92,10 +94,11 @@ public class Player : MonoBehaviour
         {
             GameObject projectile = Instantiate(projectilePrefab[weaponLevel - 1], transform.position, transform.rotation);
             projectile.GetComponent<Bullet>().bulletId = id;
+            projectile.GetComponent<Bullet>().index = bulletIndex++;
             float heading = transform.rotation.eulerAngles.z + 90.0f;
             Vector3 direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), Mathf.Sin(heading * Mathf.Deg2Rad));
             projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
-            ServerSend.PlayerShooting(this);
+            ServerSend.PlayerShooting(this, projectile.GetComponent<Bullet>());
         }
     }
    
@@ -111,16 +114,16 @@ public class Player : MonoBehaviour
         Active(false);
         dead = true;
         SpawnPowerUps();
+        weaponLevel = 1;
+        ServerSend.SpawnPowerUp(this);
         ServerSend.PlayerDestroy(this, killerId);
-        Debug.Log($"player {killerId} killed player {id}");
         StartCoroutine("Respawn");
-
     }
  
     public IEnumerator Respawn()
     {
         Debug.Log("Respawning...");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         health = GameSettings.PLAYER_MAX_HEALTH;
         Active(true);
         dead = false;

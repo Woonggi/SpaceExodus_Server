@@ -105,12 +105,33 @@ public class ServerSend
             SendUDPDataToAll(packet);
         }
     }
-    public static void PlayerShooting(Player player)
+    public static void PlayerShooting(Player player, Bullet bullet)
     {
         using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_PLAYER_SHOOTING))
         {
             packet.Write(player.id);
+            packet.Write(bullet.index);
             packet.Write(player.heading);
+            SendTCPDataToAll(packet);
+        }
+    }
+
+    public static void BulletPosition(Bullet bullet)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_BULLET_POSITION))
+        {
+            packet.Write(bullet.bulletId);
+            packet.Write(bullet.index);
+            packet.Write(bullet.transform.position);
+            SendUDPDataToAll(packet);
+        }
+    }
+    public static void BulletDestroy(Bullet bullet)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_BULLET_DESTROY))
+        {
+            packet.Write(bullet.bulletId);
+            packet.Write(bullet.index);
             SendTCPDataToAll(packet);
         }
     }
@@ -159,6 +180,14 @@ public class ServerSend
         using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_GAME_OVER))
         {
             packet.Write(winner);
+            SendTCPDataToAll(packet);
+        }
+    }
+    public static void SpawnPowerUp(Player player)
+    {
+        using (CustomPacket packet = new CustomPacket((int)ServerPackets.SP_SPAWN_POWERUP))
+        {
+            packet.Write(player.transform.position);
             SendTCPDataToAll(packet);
         }
     }

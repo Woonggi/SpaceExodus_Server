@@ -17,7 +17,7 @@ public class Server
 
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
-    public static bool started = true;
+    public static bool started = false;
 
     public static void Start(int _maxPlayers, int _port)
     {

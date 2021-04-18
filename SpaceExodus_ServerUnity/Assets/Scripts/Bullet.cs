@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public int index;
     public int bulletId;
     public int damage;
+    private void FixedUpdate()
+    {
+        ServerSend.BulletPosition(this);
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         GameObject otherObject = other.gameObject;
@@ -21,6 +26,13 @@ public class Bullet : MonoBehaviour
             {
                 player.Destroy(bulletId);
             }
+
+            ServerSend.BulletDestroy(this);
+            Destroy(gameObject);
+        }
+        else if (otherObject.tag == "Asteroid")
+        {
+            ServerSend.BulletDestroy(this);
             Destroy(gameObject);
         }
     }
