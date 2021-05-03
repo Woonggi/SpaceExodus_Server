@@ -8,6 +8,7 @@ using UnityEngine;
 public class Server
 {
     public static int maxPlayers { get; private set; }
+    public static int goalKills;
     public static int port { get; private set; }
     public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
     public static int frame = 1;
@@ -129,8 +130,11 @@ public class Server
    
     public static void Stop()
     {
-        tcpListener.Stop();
-        udpListener.Close();
+        if (tcpListener != null)
+        {
+            tcpListener.Stop();
+            udpListener.Close();
+        }
     }
 }
 

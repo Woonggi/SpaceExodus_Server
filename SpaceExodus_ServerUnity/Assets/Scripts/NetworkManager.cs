@@ -30,7 +30,7 @@ public class NetworkManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 30;
         HostName.text = "Host Name : " + Dns.GetHostName();
-        Server.Start(50, 26950);
+        // Server.Start(50, 26950);
     }
 
     private void OnApplicationQuit()

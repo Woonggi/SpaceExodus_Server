@@ -64,10 +64,11 @@ public class ServerSend
         {
             packet.Write(msg);
             packet.Write(toClient);
-            packet.Write(GameSettings.GOAL_KILL_SCORE);
+            packet.Write(Server.goalKills);
             SendTCPData(toClient, packet);
         }
     }
+
 
     public static void SpawnPlayer(int toClient, Player player)
     {
